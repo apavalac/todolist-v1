@@ -1,5 +1,9 @@
+// npm installed modules
 const express = require("express");
 const bodyParser = require("body-parser");
+
+// Custom modules
+const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -10,20 +14,15 @@ let nItem = [
 	"Food"
 ];
 
+// Body-Parser module init
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Using EJS templates
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) =>{
-	let today = new Date();
 
-	let options = {
-		weekday: "long",
-		day: "numeric",
-		month: "long"
-	};
-
-	let day = today.toLocaleDateString("en-US", options);
+	let day = date();
 
 	res.render("index", {
 		day: day,
@@ -39,6 +38,8 @@ app.post("/", (req, res) => {
 	res.redirect("/");
 });
 
+
+// Start listening on process port for horoku
 app.listen(process.env.PORT, () => {
-	console.log("Server start listen on port 3000");
+	console.log("Server start listen on port " + process.env.PORT);
 });
